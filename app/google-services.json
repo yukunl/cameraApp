@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "624560435505",
+    "firebase_url": "https://sensorapp-7149a.firebaseio.com",
+    "project_id": "sensorapp-7149a",
+    "storage_bucket": "sensorapp-7149a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624560435505:android:cce16e0790d19ebf10c010",
+        "android_client_info": {
+          "package_name": "com.example.cameraapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "624560435505-thnnf5hk2rdkcnkev5cs85ev3v7arrc5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyActuLrmXKK8lqyaO2MkpjLtdd6C_L7aHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "624560435505-thnnf5hk2rdkcnkev5cs85ev3v7arrc5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

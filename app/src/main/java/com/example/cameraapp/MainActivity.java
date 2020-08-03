@@ -1,13 +1,16 @@
 package com.example.cameraapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-
+import	android.widget.ProgressBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -19,7 +22,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -29,8 +34,12 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener{
+public class MainActivity extends AppCompatActivity implements SensorEventListener,View.OnClickListener{
 
     private static final String TAG = "MainActivity";
     private SensorManager sensorManager;
@@ -39,6 +48,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Thread thread;
     private boolean plotData = true;
     Sensor accelerometer;
+    //firebase check
+    private Button register;
+    private EditText email;
+    private EditText password;
+    private TextView signin;
+    private String emailinfo;
+    private String passwordinfo;
+    private ProgressDialog progressDialog;
+  //  private FirebaseAuth firebaseAuth;
+
 
     // ImageView imageView;
     @Override
@@ -116,6 +135,30 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         startPlot ();
 
+        //get email and password
+        register = (Button) findViewById(R.id.register);
+        email = (EditText) findViewById(R.id.email);
+        password = (EditText) findViewById(R.id.password);
+        signin = (TextView) findViewById(R.id.signin);
+        progressDialog = new ProgressDialog (this);
+        progressDialog.setMessage("Registering user");
+        progressDialog.show();
+        register.setOnClickListener(this);
+        signin.setOnClickListener(this);
+      /*  firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT);
+                }
+                else {
+
+                    Toast.makeText(MainActivity.this, "Please try again", Toast.LENGTH_SHORT);
+
+                }
+                       }
+        });*/
     }
 
     private void startPlot () {
@@ -244,6 +287,29 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager.unregisterListener(this);
         thread.interrupt();
         super.onDestroy();
+    }
+
+    private void registerUser () {
+         emailinfo = email.getText().toString().trim();
+         passwordinfo = password.getText().toString().trim();
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+        if (TextUtils.isEmpty(emailinfo)) {
+              Toast.makeText(context, "Please enter email address", duration).show();
+        }
+        if (TextUtils.isEmpty(passwordinfo)) {
+            Toast.makeText(context, "Please enter password", duration).show();
+        }
+
+    }
+    @Override
+    public void onClick(View view) {
+        if (view ==register) {
+            registerUser ();
+        }
+        if (view ==signin) {
+            //open login activity
+        }
     }
 
 //    @Override
