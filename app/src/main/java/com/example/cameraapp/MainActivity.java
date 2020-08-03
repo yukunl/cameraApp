@@ -81,6 +81,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         });
 
+        // keystroke
+        Button keystroke = findViewById(R.id.keystroke);
+        keystroke.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(MainActivity.this, keystroke.class);
+                startActivity(intent);
+            }
+        }
+
+        );
+
         //accelerometer
         sensorManageracc = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 

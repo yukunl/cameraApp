@@ -130,6 +130,14 @@
         android:layout_marginTop="30sp"
         android:text="Z Value" />
 
+    <Button
+        android:id="@+id/keystroke"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="keystroke" />
+
+
+
 
 </LinearLayout>
 </ScrollView>
