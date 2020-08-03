@@ -42,12 +42,14 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MainActivity extends AppCompatActivity implements SensorEventListener,View.OnClickListener{
 
     private static final String TAG = "MainActivity";
-    private SensorManager sensorManager;
-    TextView xvalue, yvalue, zvalue;
+    private SensorManager sensorManageracc;
+    private SensorManager sensorManagergyro;
+    TextView xvalue, yvalue, zvalue, gyrox, gyroy,gyroz;
     private LineChart mChart;
     private Thread thread;
     private boolean plotData = true;
     Sensor accelerometer;
+    Sensor gyroscope;
     //firebase check
     private Button register;
     private EditText email;
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //camera
         Button backCamera = findViewById(R.id.backcamera);
 
         backCamera.setOnClickListener(new View.OnClickListener() {
@@ -78,12 +81,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         });
 
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        //accelerometer
+        sensorManageracc = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        accelerometer = sensorManageracc.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (accelerometer != null) {
-            sensorManager.registerListener(MainActivity.this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManageracc.registerListener(MainActivity.this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         }
+
+        //gyroscope
+        sensorManagergyro = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        gyroscope = sensorManagergyro.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        if (gyroscope != null) {
+            sensorManageracc.registerListener(MainActivity.this, gyroscope, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+
 
         mChart = (LineChart) findViewById(R.id.accChart);
         mChart.getDescription().setEnabled(true);
@@ -132,6 +144,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         xvalue = (TextView) findViewById(R.id.xValue);
         yvalue = (TextView) findViewById(R.id.yValue);
         zvalue = (TextView) findViewById(R.id.zValue);
+
+        //for textview data
+        gyrox = (TextView) findViewById(R.id.gyroxValue);
+        gyroy = (TextView) findViewById(R.id.gyroyValue);
+        gyroz = (TextView) findViewById(R.id.gyrozValue);
 
         startPlot ();
 
@@ -190,6 +207,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         xvalue.setText("X value: " + event.values[0]);
         yvalue.setText("Y value: " + event.values[1]);
         zvalue.setText("Z value: " + event.values[2]);
+
+        Log.d("Gyroscope", "onSensorChanged x: " + event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2]);
+        gyrox.setText("X value: " + event.values[0]);
+        gyroy.setText("Y value: " + event.values[1]);
+        gyroz.setText("Z value: " + event.values[2]);
 
         if (plotData) {
             addEntry(event);
@@ -272,19 +294,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (thread != null) {
             thread.interrupt();
         }
-        sensorManager.unregisterListener(this);
+        sensorManageracc.unregisterListener(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+        sensorManageracc.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
 
     }
 
     @Override
     protected void onDestroy() {
-        sensorManager.unregisterListener(this);
+        sensorManageracc.unregisterListener(this);
         thread.interrupt();
         super.onDestroy();
     }
