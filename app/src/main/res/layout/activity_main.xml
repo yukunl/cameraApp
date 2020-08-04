@@ -14,16 +14,16 @@
         android:id="@+id/email"
         android:hint="Enter your email"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="30sp"
-        android:text="Email" />
+        android:text="" />
     <EditText
         android:id="@+id/password"
         android:hint="Enter your password"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="30sp"
-        android:text="Password" />
+        android:text="" />
 
     <Button
         android:id="@+id/register"

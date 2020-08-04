@@ -38,6 +38,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener,View.OnClickListener{
 
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private String emailinfo;
     private String passwordinfo;
     private ProgressDialog progressDialog;
-  //  private FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
 
 
     // ImageView imageView;
@@ -139,26 +140,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         register = (Button) findViewById(R.id.register);
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
+        registerUser ();
         signin = (TextView) findViewById(R.id.signin);
-        progressDialog = new ProgressDialog (this);
-        progressDialog.setMessage("Registering user");
-        progressDialog.show();
+
         register.setOnClickListener(this);
         signin.setOnClickListener(this);
-      /*  firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT);
-                }
-                else {
 
-                    Toast.makeText(MainActivity.this, "Please try again", Toast.LENGTH_SHORT);
+        progressDialog = new ProgressDialog (this);
 
-                }
-                       }
-        });*/
     }
 
     private void startPlot () {
@@ -296,10 +285,67 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         int duration = Toast.LENGTH_SHORT;
         if (TextUtils.isEmpty(emailinfo)) {
               Toast.makeText(context, "Please enter email address", duration).show();
+        return;
         }
         if (TextUtils.isEmpty(passwordinfo)) {
             Toast.makeText(context, "Please enter password", duration).show();
+        return;
         }
+progressDialog.setMessage("Registering User");
+        progressDialog.show();
+
+      firebaseAuth = FirebaseAuth.getInstance();
+
+         /*  firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo)
+             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                         if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                          //  FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });*/
+
+        firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT);
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(MainActivity.this, "Please try again", Toast.LENGTH_SHORT);
+                        }
+
+                        // ...
+                    }
+                });
+
+        firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                if (task.isSuccessful()){
+                    Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT);
+                }
+                else {
+
+                    Toast.makeText(MainActivity.this, "Please try again", Toast.LENGTH_SHORT);
+                }
+            }
+        });
 
     }
     @Override
