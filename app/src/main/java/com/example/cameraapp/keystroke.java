@@ -18,18 +18,18 @@ public class keystroke extends AppCompatActivity {
         Intent intent = getIntent();
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (KeyEvent.KEYCODE_BACK == keyCode){
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        Log.i("key pressed", String.valueOf(event.getKeyCode()));
-        return super.dispatchKeyEvent(event);
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (KeyEvent.KEYCODE_BACK == keyCode){
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
+//
+//    @Override
+//    public boolean dispatchKeyEvent(KeyEvent event) {
+//        Log.i("key pressed", String.valueOf(event.getKeyCode()));
+//        return super.dispatchKeyEvent(event);
+//    }
 
 }
