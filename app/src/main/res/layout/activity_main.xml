@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -53,12 +53,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/text_home"
+        android:id="@+id/accel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:text="accelerometer"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,21 +68,21 @@
 
     <TextView
         android:id="@+id/xValue"
-        android:layout_width="match_parent"
+        android:layout_width="152dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30sp"
         android:text="X Value" />
 
     <TextView
         android:id="@+id/yValue"
-        android:layout_width="match_parent"
+        android:layout_width="152dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30sp"
         android:text="Y Value" />
 
     <TextView
         android:id="@+id/zValue"
-        android:layout_width="match_parent"
+        android:layout_width="152dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30sp"
         android:text="Z Value" />
@@ -90,6 +91,51 @@
         android:id="@+id/accChart"
         android:layout_width="match_parent"
         android:layout_height="299dp" />
+
+
+
+
+    <TextView
+        android:id="@+id/gyro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Gyroscope"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/gyroxValue"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30sp"
+        android:text="X Value" />
+
+    <TextView
+        android:id="@+id/gyroyValue"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30sp"
+        android:text="Y Value" />
+
+    <TextView
+        android:id="@+id/gyrozValue"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30sp"
+        android:text="Z Value" />
+
+    <Button
+        android:id="@+id/keystroke"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="keystroke" />
+
 
 
 
