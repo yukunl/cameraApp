@@ -103,6 +103,7 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
             public boolean onTouch(View v, MotionEvent event) {
 
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    //inputConnection.commitText("1", 1);
                     Log.i("Pressure: " , "Pressure for button 1"  + event.getPressure());
                     // Pressed
 
@@ -251,7 +252,6 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
                 inputConnection.commitText("", 1);
             }
         } else {
-
             String value = keyValues.get(v.getId());
             inputConnection.commitText(value, 1);
         }

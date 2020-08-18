@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import	android.widget.ProgressBar;
@@ -66,6 +67,35 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+       // findViewById(R.id.class)
+
+        View view = findViewById(R.id.mainac);
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view,MotionEvent event) {
+                float x = event.getX();
+                float y = event.getY();
+                float pressure = event.getPressure();
+//Log.i("Screen touch: ", "This is x " + x + " This is y " + y + " Pressure " + pressure);
+
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        Log.i("Screen touch down : ", "This is x " + x + " This is y " + y + " Pressure " + pressure);
+
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        Log.i("TAG", "moving: ");
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Log.i("Screen touch up: ", "This is x " + x + " This is y " + y + " Pressure " + pressure);
+
+                        break;
+                }
+
+                return true;
+
+            }
+        });
 
         //camera
         Button backCamera = findViewById(R.id.backcamera);
@@ -190,6 +220,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });*/
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+//        int x = (int)event.getX();
+//        int y = (int)event.getY();
+//
+//        switch (event.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//                Log.i("track motion of X", "X " + x);
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//            case MotionEvent.ACTION_UP:
+//        }
+
+        Log.i("track motion of X", "X " + (int)event.getX());
+        return true;
+    }
+
     private void startPlot () {
 
         if (thread != null) {
@@ -207,6 +255,28 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
     }
+
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event)
+//    {
+//        int x = (int)event.getX();
+//        int y = (int)event.getY();
+//        float p = event.getPressure();
+//
+//        switch (event.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//                Log.i(" down x coordinate: ", "touched down x coordinate" + x + " y coordinate " + y + " pressure "+ p);
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                Log.i("move x coordinate: ", "touched down x coordinate" + x + " y coordinate " + y + " pressure "+ p);
+//                break;
+//            case MotionEvent.ACTION_UP:
+//                Log.i("up x coordinate: ", "touched down x coordinate" + x + " y coordinate " + y + " pressure "+ p);
+//                break;
+//        }
+//
+//        return true;
+//    }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
