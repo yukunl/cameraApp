@@ -3,6 +3,14 @@
     package="com.example.cameraapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -20,7 +28,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".keystroke" />
-
+        <activity android:name=".FilesSyncToFirebase" />
+        <activity android:name=".GPSTracker" />
+        <activity android:name=".MarshMelloPermission" />
+        <activity android:name=".SensorData" />
     </application>
 
 </manifest>

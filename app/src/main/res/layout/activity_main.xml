@@ -136,7 +136,21 @@
         android:layout_height="wrap_content"
         android:text="keystroke" />
 
+    <FrameLayout
+        android:id="@+id/CameraPreview"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true">
 
+    </FrameLayout>
+
+    <Chronometer
+        android:id="@+id/chrono"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:textSize="18sp" />
 
 
 </LinearLayout>
