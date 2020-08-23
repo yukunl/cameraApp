@@ -10,7 +10,8 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import	android.widget.ProgressBar;
+import android.widget.ProgressBar;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -52,7 +53,9 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.SystemClock;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -72,12 +75,12 @@ import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener,View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements SensorEventListener, View.OnClickListener {
 
     private static final String TAG = "MainActivity";
     private SensorManager sensorManageracc;
-    private SensorManager sensorManagergyro;
-    TextView xvalue, yvalue, zvalue, gyrox, gyroy,gyroz;
+    //private SensorManager sensorManagergyro;
+    TextView xvalue, yvalue, zvalue, gyrox, gyroy, gyroz;
     private LineChart mChart;
     private Thread thread;
     private boolean plotData = true;
@@ -109,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     // ImageView imageView;
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         backCamera.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(takePictureIntent, 1);
@@ -129,13 +132,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // keystroke
         Button keystroke = findViewById(R.id.keystroke);
-        keystroke.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent intent = new Intent(MainActivity.this, keystroke.class);
-                Log.i("Before enter intent",  "i am here");
-                startActivity(intent);
-            }
-        }
+        keystroke.setOnClickListener(new View.OnClickListener() {
+                                         public void onClick(View v) {
+                                             Intent intent = new Intent(MainActivity.this, keystroke.class);
+                                             Log.i("Before enter intent", "i am here");
+                                             startActivity(intent);
+                                         }
+                                     }
 
         );
 
@@ -148,10 +151,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
         //gyroscope
-        sensorManagergyro = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        gyroscope = sensorManagergyro.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+     //   sensorManagergyro = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        gyroscope = sensorManageracc.getDefaultSensor(Sensor.TYPE_LIGHT);
         if (gyroscope != null) {
             sensorManageracc.registerListener(MainActivity.this, gyroscope, SensorManager.SENSOR_DELAY_NORMAL);
+            Log.i("reg", "sensor mag success");
         }
 
 
@@ -208,44 +212,44 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         gyroy = (TextView) findViewById(R.id.gyroyValue);
         gyroz = (TextView) findViewById(R.id.gyrozValue);
 
-        startPlot ();
+        startPlot();
 
         //get email and password
         register = (Button) findViewById(R.id.register);
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
-        registerUser ();
+        registerUser();
         signin = (TextView) findViewById(R.id.signin);
 
         register.setOnClickListener(this);
         signin.setOnClickListener(this);
 
-        progressDialog = new ProgressDialog (this);
+        progressDialog = new ProgressDialog(this);
 
         //real time
-        MarshMelloPermission marshMelloPermission =new MarshMelloPermission(this);
-        if(!marshMelloPermission.checkPermissionForRecord()){
+        MarshMelloPermission marshMelloPermission = new MarshMelloPermission(this);
+        if (!marshMelloPermission.checkPermissionForRecord()) {
             marshMelloPermission.checkPermissionForRecord();
         }
-        if(!marshMelloPermission.checkPermissionForCamera()){
+        if (!marshMelloPermission.checkPermissionForCamera()) {
             marshMelloPermission.checkPermissionForCamera();
         }
-        if(!marshMelloPermission.checkPermissionForExternalStorage()){
+        if (!marshMelloPermission.checkPermissionForExternalStorage()) {
             marshMelloPermission.checkPermissionForExternalStorage();
         }
 
-        if(!marshMelloPermission.checkPermissionForFineLocation()){
+        if (!marshMelloPermission.checkPermissionForFineLocation()) {
             marshMelloPermission.checkPermissionForFineLocation();
         }
         chrono = (Chronometer) this.findViewById(R.id.chrono);
-        final long clock=SystemClock.elapsedRealtime();
+        final long clock = SystemClock.elapsedRealtime();
         final int[] i = {0};
 
         try {
             //  FrameLayout preview = (FrameLayout) findViewById(R.id.CameraPreview);
             //    preview.addView(mPreview);
-            mCamera=getCameraInstance();
-            mPreview= new CameraPreview(MainActivity.this,mCamera);
+            mCamera = getCameraInstance();
+            mPreview = new CameraPreview(MainActivity.this, mCamera);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -253,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         FrameLayout preview = (FrameLayout) findViewById(R.id.CameraPreview);
         preview.addView(mPreview);
-        sensorManager= (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
 
         preview.setOnClickListener(
@@ -278,16 +282,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                 mMediaRecorder.start();
 //                                  chrono.setBase(clock);
                                 chrono.start();
-                                File file=null;
+                                File file = null;
 
                                 try {
-                                    file=createFile();
+                                    file = createFile();
                                 } catch (IOException e) {
                                     e.printStackTrace();
 
                                 }
 
-                                timedDataRecording= new TimedDataRecording(MainActivity.this,file,sensorManager);
+                                timedDataRecording = new TimedDataRecording(MainActivity.this, file, sensorManager);
                                 timedDataRecording.SetVidUri(getOutputMediaFileUri(MEDIA_TYPE_VIDEO));
                                 timedDataRecording.startTimer(chrono);
                                 isRecording = true;
@@ -301,9 +305,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
         );
 
-                            }
+    }
 
-    private void startPlot () {
+    private void startPlot() {
 
         if (thread != null) {
             thread.interrupt();
@@ -314,8 +318,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 while (true) {
                     plotData = true;
                     try {
-                        Thread.sleep( 10);
-                    }catch ( InterruptedException e ) { e.printStackTrace();}
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -328,20 +334,33 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
-        Log.d("Accelerometer", "onSensorChanged x: " + event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2]);
-        xvalue.setText("X value: " + event.values[0]);
-        yvalue.setText("Y value: " + event.values[1]);
-        zvalue.setText("Z value: " + event.values[2]);
+        Sensor type = event.sensor;
+        if (type.getType() == Sensor.TYPE_ACCELEROMETER) {
+            Log.d("Accelerometer", "onSensorChanged x: " + event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2]);
 
-        Log.d("Gyroscope", "onSensorChanged x: " + event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2]);
-        gyrox.setText("X value: " + event.values[0]);
-        gyroy.setText("Y value: " + event.values[1]);
-        gyroz.setText("Z value: " + event.values[2]);
+            xvalue.setText("X value: " + event.values[0]);
+            yvalue.setText("Y value: " + event.values[1]);
+            zvalue.setText("Z value: " + event.values[2]);
 
-        if (plotData) {
-            addEntry(event);
-            plotData = false;
+            if (plotData) {
+                addEntry(event);
+                plotData = false;
+            }
+
         }
+        else if (type.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+            //TYPE_MAGNETIC_FIELD
+            Log.d("Gyroscope", "onSensorChanged x: " + event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2]);
+            gyrox.setText("X value: " + event.values[0]);
+            gyroy.setText("Y value: " + event.values[1]);
+            gyroz.setText("Z value: " + event.values[2]);
+
+            if (plotData) {
+                addEntry(event);
+                plotData = false;
+            }
+        }
+
     }
 
     private void addEntry(SensorEvent event) {
@@ -430,25 +449,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onResume() {
         super.onResume();
         sensorManageracc.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+        sensorManageracc.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_GAME);
 // Get the Camera instance as the activity achieves full user focus
         if (mCamera == null) {
-            mCamera=getCameraInstance();
+            mCamera = getCameraInstance();
         }
 
-        if(mMediaRecorder==null){
+        if (mMediaRecorder == null) {
             prepareVideoRecorder();
         }
     }
 
-    public Camera getCameraInstance(){
+    public Camera getCameraInstance() {
         Camera c = null;
         try {
             c = Camera.open(); // attempt to get a Camera instance
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             // Camera is not available (in use or does not exist)
 
-            Toast.makeText(getApplicationContext(),"Camera is not available (in use or does not exist)",Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "Camera is not available (in use or does not exist)", Toast.LENGTH_SHORT);
         }
         return c; // returns null if camera is unavailable
     }
@@ -458,8 +477,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String FileName = "CSV_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.getExternalStorageState());
-
-
+        Log.i("csv", "i am here" + storageDir.getAbsolutePath());
 
         File file = File.createTempFile(
                 FileName,  /* prefix */
@@ -471,7 +489,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return file;
     }
 
-    private boolean prepareVideoRecorder(){
+    private boolean prepareVideoRecorder() {
 
         mCamera = getCameraInstance();
         mMediaRecorder = new MediaRecorder();
@@ -508,7 +526,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return true;
     }
 
-    private void releaseMediaRecorder(){
+    private void releaseMediaRecorder() {
         if (mMediaRecorder != null) {
             mMediaRecorder.reset();   // clear recorder configuration
             mMediaRecorder.release(); // release the recorder object
@@ -517,19 +535,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    private void releaseCamera(){
-        if (mCamera != null){
+    private void releaseCamera() {
+        if (mCamera != null) {
             mCamera.release();        // release the camera for other applications
             mCamera = null;
         }
     }
 
-    private  Uri getOutputMediaFileUri(int type){
+    private Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
     }
 
-    /** Create a File for saving an image or video */
-    private File getOutputMediaFile(int type){
+    /**
+     * Create a File for saving an image or video
+     */
+    private File getOutputMediaFile(int type) {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
@@ -538,16 +558,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // between applications and persist after your app has been uninstalled.
 
 
-
         // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE){
+        if (type == MEDIA_TYPE_IMAGE) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".jpg");
-        } else if(type == MEDIA_TYPE_VIDEO) {
+                    "IMG_" + timeStamp + ".jpg");
+        } else if (type == MEDIA_TYPE_VIDEO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "VID_"+ timeStamp + ".mp4");
+                    "VID_" + timeStamp + ".mp4");
         } else {
             return null;
         }
@@ -563,23 +582,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onDestroy();
     }
 
-    private void registerUser () {
-         emailinfo = email.getText().toString().trim();
-         passwordinfo = password.getText().toString().trim();
+    private void registerUser() {
+        emailinfo = email.getText().toString().trim();
+        passwordinfo = password.getText().toString().trim();
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
         if (TextUtils.isEmpty(emailinfo)) {
-              Toast.makeText(context, "Please enter email address", duration).show();
-        return;
+            Toast.makeText(context, "Please enter email address", duration).show();
+            return;
         }
         if (TextUtils.isEmpty(passwordinfo)) {
             Toast.makeText(context, "Please enter password", duration).show();
-        return;
+            return;
         }
-progressDialog.setMessage("Registering User");
+        progressDialog.setMessage("Registering User");
         progressDialog.show();
 
-      firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
          /*  firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo)
              .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -622,10 +641,9 @@ progressDialog.setMessage("Registering User");
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT);
-                }
-                else {
+                } else {
 
                     Toast.makeText(MainActivity.this, "Please try again", Toast.LENGTH_SHORT);
                 }
@@ -633,12 +651,13 @@ progressDialog.setMessage("Registering User");
         });
 
     }
+
     @Override
     public void onClick(View view) {
-        if (view ==register) {
-            registerUser ();
+        if (view == register) {
+            registerUser();
         }
-        if (view ==signin) {
+        if (view == signin) {
             //open login activity
         }
     }
