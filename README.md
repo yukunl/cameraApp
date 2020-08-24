@@ -1,5 +1,5 @@
 # cameraApp
-<h4 align="center">A desktop menubar app based on <a href="http://electron.atom.io" target="_blank">Electron</a>.</h4>
+<h4 align="center">A mobile sensor collection app for biometrics authentication.</h4>
 Features 
 face camera 
 hand camera 
