@@ -11,17 +11,11 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Chronometer;
 import android.widget.Toast;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-
-/**
- * Created by safi on 7/25/17.
- */
 
 public class TimedDataRecording {
 
@@ -39,15 +33,9 @@ public class TimedDataRecording {
     static long timeOfVid=0;
 
     String[] datapoints;
-
     GPSTracker gps;
-
     SensorManager sensorManager;
-
-
     SensorData SD;
-
-
     LocationListener locationListener;
     LocationManager LM;
 
@@ -64,30 +52,14 @@ public class TimedDataRecording {
 
     TimedDataRecording(Context con, File FileToWrite, SensorManager sm) {
 
-
         file = FileToWrite;
-
-
         filesSyncToFirebase = new FilesSyncToFirebase();
-
         sensorManager = sm;
-
-
         context = con;
-
-
-
         filesSyncToFirebase.SetDirName("test");
-
     }
 
-
-
-
-
     public void SetVidUri(Uri uri) {
-
-
         photoURI = uri;
 
     }
@@ -99,8 +71,6 @@ public class TimedDataRecording {
 
             filesSyncToFirebase.SetPhotoUri(photoURI);
             filesSyncToFirebase.StartSync();
-
-
         }
     }
 
@@ -110,19 +80,12 @@ public class TimedDataRecording {
             public void run() {
                 mTimerHandler.post(new Runnable() {
                     public void run() {
-
-
                         gps = new GPSTracker(context);
-
                         if (gps.canGetLocation()) {
 
                             double lat = gps.getLatitude();
                             double longi = gps.getLongitude();
-
-
                             SD = new SensorData(sensorManager);
-
-
                             datapoints = new String[9];
 
                             datapoints[0]=chronometer.getText().toString();
@@ -138,11 +101,11 @@ public class TimedDataRecording {
                             }
 
 
-                            datapoints[3] = "" + SensorData.gyro_x;
-                            datapoints[4] = "" + SensorData.gyro_y;
-                            datapoints[5] = "" + SensorData.gyro_z;
+                            datapoints[3] = "gyro_x" + SensorData.gyro_x;
+                            datapoints[4] = "gyro_y" + SensorData.gyro_y;
+                            datapoints[5] = "gyro_x" + SensorData.gyro_z;
 
-                            datapoints[6] = "" + SensorData.linear_acc_x;
+                            datapoints[6] = "acc_x" + SensorData.linear_acc_x;
                             datapoints[7] = "" + SensorData.linear_acc_y;
                             datapoints[8] = "" + SensorData.linear_acc_z;
 
@@ -157,15 +120,8 @@ public class TimedDataRecording {
                                 if (datapoints[i] == "-1") {
 
                                     count--;
-
-
                                 }
-
-
                             }
-
-
-
                             if(count==0){
                                 UpdateFile = true;
                                 count=datapoints.length;
@@ -184,12 +140,9 @@ public class TimedDataRecording {
                                     e.printStackTrace();
                                 }
 
-
                                 Toast.makeText(context, "Your Location is - \nLat: " + latitude + "\nLong: " + longitude
-                                        + "\nGyro:" + SensorData.linear_acc_x+ " " + SensorData.linear_acc_y + " " + SensorData.linear_acc_z, Toast.LENGTH_LONG).show();
-
-
-
+                                                + "\nGyro:" + SensorData.gyro_x+ " " + SensorData.gyro_y + " " + SensorData.gyro_z
+                                        + "\nACC:" + SensorData.linear_acc_x+ " " + SensorData.linear_acc_y + " " + SensorData.linear_acc_z, Toast.LENGTH_LONG).show();
 
                             }
                             else{
@@ -199,13 +152,7 @@ public class TimedDataRecording {
 
                             UpdateFile=false;
 
-
-
                         }
-
-
-
-
 
                         else{
 

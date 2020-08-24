@@ -5,18 +5,11 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-
-/**
- * Created by safi on 7/25/17.
- */
+import android.util.Log;
 
 public class SensorData implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mLight;
-
-    private Sensor accelerometer;
-    private Sensor head;
-    private Sensor gyro;
 
     static  float linear_acc_x = -1;
     static float linear_acc_y = -1;
@@ -28,16 +21,12 @@ public class SensorData implements SensorEventListener {
     static float gyro_z = -1;
 
     SensorData(SensorManager sm) {
-
-
         mSensorManager =sm;
-        accelerometer=mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(this, accelerometer , SensorManager.SENSOR_DELAY_NORMAL);
-        gyro=mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-
-
-
-    }
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),  SensorManager.SENSOR_DELAY_NORMAL);
+        Log.i("changeabc", "reg acc");
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_NORMAL);
+        Log.i("changeabc", "reg gyr");
+          }
 
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -47,12 +36,19 @@ public class SensorData implements SensorEventListener {
     @Override
     public final void onSensorChanged(SensorEvent event) {
 
-
+        if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+            Log.i("changeabc", "enter gyro");
+            gyro_x = event.values[0];
+            gyro_y = event.values[1];
+            gyro_z = event.values[2];
+        }
+        else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+            Log.i("changeabc", "enter acc");
 
             linear_acc_x = event.values[0];
             linear_acc_y = event.values[1];
             linear_acc_z = event.values[2];
-
+        }
 
 
     }
