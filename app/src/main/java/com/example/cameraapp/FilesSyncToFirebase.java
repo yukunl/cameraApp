@@ -20,6 +20,7 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
+import java.util.concurrent.Executor;
 
 /**
  * Created by safi on 7/21/17.
@@ -37,10 +38,48 @@ public class FilesSyncToFirebase {
 
 
     FilesSyncToFirebase(){
-        FirebaseStorage storage = FirebaseStorage.getInstance("gs://sensorapp-7149a.appspot.com/");
+        FirebaseStorage storage = FirebaseStorage.getInstance();
         mStorageRef = storage.getReference();
 
     }
+
+/*    public void csvUploader(String filePath, final String callDate) {
+        StorageReference mStorageReference = FirebaseStorage.getInstance().getReference();
+        Log.e("LOG", "Entering CSVUPLOADER");
+        Uri file = Uri.fromFile(new File(filePath));
+        Log.e("csvUploader Uri File:", filePath.toString());
+
+        // Create the file metadata
+        StorageMetadata metadata = new StorageMetadata.Builder().setContentType("text/csv").build();
+        Log.e("LOG","Metadata: " + metadata.toString());
+
+        // Upload file and metadata to the path 'reports/date.csv'
+        CancellableTask uploadTask = mStorageReference.child("reports/" + file.getLastPathSegment()).putFile(file, metadata);
+
+
+        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                //System.out.println("Upload is " + progress + "% done");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Log.e("LOG", "Unsucessfull in CSVUPLOADER");
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // Handle successful uploads on complete
+                //Uri downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+                //mainActivity.setDownloadLink(downloadUrl);
+                Log.e("LOG", "Successfull in CSVUPLOADER");
+                mainActivity.getUrlAsync(callDate);
+            }
+        });
+    }*/
 
 
     public void StartSync(){
@@ -54,14 +93,23 @@ public class FilesSyncToFirebase {
 
 
     private void  DataSync(StorageReference Data,Uri file) {
+        final StorageReference DataRef = Data;
+
+        Log.e("csvUploader dataref:", Data.toString());
+        Log.e("csvUploader Uri File:", file.toString());
 
         Data.putFile(file)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get a URL to the uploaded content
-                        Uri downloadUrl = taskSnapshot.getUploadSessionUri();
-                        Log.v("********************","*****************THEN WHY");
+                        //When the image has successfully uploaded, get its download URL
+                        DataRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Uri dlUri = uri;
+                                Log.e("csvUploader Uri File:", dlUri.toString());
+                                        }
+                        });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -69,11 +117,17 @@ public class FilesSyncToFirebase {
                     public void onFailure(@NonNull Exception exception) {
                         // Handle unsuccessful uploads
                         // ...
+                        Log.e("csvUploader error:",   exception.getLocalizedMessage().toString());
+
                         Log.v("********************","*****************THIS SUCKS");
+
                     }
                 });
 
+
+
         }
+
 
     public void  SetDirName(String name){
 
@@ -114,7 +168,7 @@ public class FilesSyncToFirebase {
         printstream.print("\n");
 
         fileinput.close();
-
+        Log.e("csvUploader Uri File:", filePath.toString());
         return (File=Uri.fromFile(new File(filePath)));
 
     }
