@@ -112,7 +112,7 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
                     // Released
                     Log.i("time released: ", "Time released for button 1 :"+ System.currentTimeMillis() );
                 }
-                return true;
+                return false;
             }
         });
 
@@ -129,7 +129,7 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
                     // Released
                     Log.i("time released: ", "Time released for button 2 :"+ System.currentTimeMillis() );
                 }
-                return true;
+                return false;
             }
         });
 
@@ -146,7 +146,7 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
                     // Released
                     Log.i("time released: ", "Time released for button 3 :"+ System.currentTimeMillis() );
                 }
-                return true;
+                return false;
             }
         });
 

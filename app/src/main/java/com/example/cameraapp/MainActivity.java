@@ -113,6 +113,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+
         //camera
         Button backCamera = findViewById(R.id.backcamera);
 
