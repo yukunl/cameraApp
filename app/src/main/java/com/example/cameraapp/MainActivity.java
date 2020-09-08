@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import	android.widget.ProgressBar;
@@ -91,15 +94,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     Sensor accelerometer;
     Sensor gyroscope;
 
-    //firebase check
-    private Button register;
-    private EditText email;
-    private EditText password;
-    private TextView signin;
-    private String emailinfo;
-    private String passwordinfo;
-    private ProgressDialog progressDialog;
-    private FirebaseAuth firebaseAuth;
+//    //firebase check
+//    private Button register;
+//    private EditText email;
+//    private EditText password;
+//    private TextView signin;
+//    private String emailinfo;
+//    private String passwordinfo;
+//    private ProgressDialog progressDialog;
+//    private FirebaseAuth firebaseAuth;
 
     //real time
 
@@ -137,17 +140,34 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         });
 
-        // keystroke
-        Button keystroke = findViewById(R.id.keystroke);
-        keystroke.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent intent = new Intent(MainActivity.this, keystroke.class);
-                Log.i("Before enter intent",  "i am here");
-                startActivity(intent);
-            }
-        }
 
-        );
+        //camera
+        Button frontCamera = findViewById(R.id.frontcamera);
+
+        frontCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, 1);
+                }
+            }
+
+        });
+
+
+
+//        // keystroke
+//        Button keystroke = findViewById(R.id.keystroke);
+//        keystroke.setOnClickListener(new View.OnClickListener(){
+//            public void onClick(View v){
+//                Intent intent = new Intent(MainActivity.this, keystroke.class);
+//                Log.i("Before enter intent",  "i am here");
+//                startActivity(intent);
+//            }
+//        }
+//
+//        );
 
         //accelerometer
         sensorManageracc = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -220,17 +240,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         startPlot ();
 
-        //get email and password
-        register = (Button) findViewById(R.id.register);
-        email = (EditText) findViewById(R.id.email);
-        password = (EditText) findViewById(R.id.password);
-        registerUser ();
-        signin = (TextView) findViewById(R.id.signin);
-
-        register.setOnClickListener(this);
-        signin.setOnClickListener(this);
-
-        progressDialog = new ProgressDialog (this);
+//        //get email and password
+//        register = (Button) findViewById(R.id.register);
+//        email = (EditText) findViewById(R.id.email);
+//        password = (EditText) findViewById(R.id.password);
+//       // registerUser ();
+//        signin = (TextView) findViewById(R.id.signin);
+//
+//        register.setOnClickListener(this);
+//        signin.setOnClickListener(this);
+//
+//        progressDialog = new ProgressDialog (this);
 
         //real time
         MarshMelloPermission marshMelloPermission =new MarshMelloPermission(this);
@@ -613,86 +633,107 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onDestroy();
     }
 
-    private void registerUser () {
-         emailinfo = email.getText().toString().trim();
-         passwordinfo = password.getText().toString().trim();
-        Context context = getApplicationContext();
-        int duration = Toast.LENGTH_SHORT;
-        if (TextUtils.isEmpty(emailinfo)) {
-              Toast.makeText(context, "Please enter email address", duration).show();
-        return;
-        }
-        if (TextUtils.isEmpty(passwordinfo)) {
-            Toast.makeText(context, "Please enter password", duration).show();
-        return;
-        }
-progressDialog.setMessage("Registering User");
-        progressDialog.show();
+//    private void registerUser () {
+//         emailinfo = email.getText().toString().trim();
+//         passwordinfo = password.getText().toString().trim();
+//        Context context = getApplicationContext();
+//        int duration = Toast.LENGTH_SHORT;
+//        if (TextUtils.isEmpty(emailinfo)) {
+//              Toast.makeText(context, "Please enter email address", duration).show();
+//        return;
+//        }
+//        if (TextUtils.isEmpty(passwordinfo)) {
+//            Toast.makeText(context, "Please enter password", duration).show();
+//        return;
+//        }
+//progressDialog.setMessage("Registering User");
+//        progressDialog.show();
+//
+//      firebaseAuth = FirebaseAuth.getInstance();
+//
+//         /*  firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo)
+//             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                         if (task.isSuccessful()) {
+//                            // Sign in success, update UI with the signed-in user's information
+//                            Log.d(TAG, "createUserWithEmail:success");
+//                          //  FirebaseUser user = firebaseAuth.getCurrentUser();
+//
+//                        } else {
+//                            // If sign in fails, display a message to the user.
+//                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+//                            Toast.makeText(MainActivity.this, "Authentication failed.",
+//                                    Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                        // ...
+//                    }
+//                });*/
+//
+//        firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo)
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()) {
+//                            // Sign in success, update UI with the signed-in user's information
+//                            Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT);
+//
+//                        } else {
+//                            // If sign in fails, display a message to the user.
+//                            Toast.makeText(MainActivity.this, "Please try again", Toast.LENGTH_SHORT);
+//                        }
+//
+//                        // ...
+//                    }
+//                });
+//
+//        firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//            @Override
+//            public void onComplete(@NonNull Task<AuthResult> task) {
+//
+//                if (task.isSuccessful()){
+//                    Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT);
+//                }
+//                else {
+//
+//                    Toast.makeText(MainActivity.this, "Please try again", Toast.LENGTH_SHORT);
+//                }
+//            }
+//        });
+//
+//    }
 
-      firebaseAuth = FirebaseAuth.getInstance();
-
-         /*  firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo)
-             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                          //  FirebaseUser user = firebaseAuth.getCurrentUser();
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        // ...
-                    }
-                });*/
-
-        firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT);
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(MainActivity.this, "Please try again", Toast.LENGTH_SHORT);
-                        }
-
-                        // ...
-                    }
-                });
-
-        firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-
-                if (task.isSuccessful()){
-                    Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT);
-                }
-                else {
-
-                    Toast.makeText(MainActivity.this, "Please try again", Toast.LENGTH_SHORT);
-                }
-            }
-        });
-
-
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.mymenu,menu);
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.login:
+                Intent intent = new Intent(this, keystroke.class);
+                this.startActivity(intent);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
+
+
     @Override
     public void onClick(View view) {
-        if (view ==register) {
-            registerUser ();
-        }
-        if (view ==signin) {
-            //open login activity
-        }
+//        if (view ==register) {
+//            registerUser ();
+//        }
+//        if (view ==signin) {
+//            //open login activity
+//        }
     }
 
 //    @Override

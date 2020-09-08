@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+<!--    &lt;!&ndash; Style to replace actionbar overflow icon. set item 'android:actionOverflowButtonStyle' in AppTheme &ndash;&gt;-->
+<!--    <style name="MyActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">-->
+<!--        <item name="android:src">@drawable/ic_launcher_personicon</item>-->
+<!--        <item name="android:background">?android:attr/actionBarItemBackground</item>-->
+<!--    </style>-->
+
 </resources>
