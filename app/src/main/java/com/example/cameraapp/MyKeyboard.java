@@ -33,10 +33,12 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
     private Button mButton1, mButton2, mButton3,mButton4, mButton5, mButton6,
             mButton7, mButton8, mButton9,mButton0, mButtonq, mButtonw,
             mButtone, mButtonr, mButtont,mButtony, mButtonu, mButtoni, mButtono,
-            mButtonp, mButtona,mButtons, mButtond, mButtonf, mButtong, mButtonh,
+            mButtonp, mButtona,mButtons, mButtond, mButtonf, mButtong, mButtonh, mButtonshift,
             mButtonj,mButtonk, mButtonl, mButtonz,mButtonx, mButtonc,mButtonv, mButtonb, mButtonn,mButtonm;
     private Button mButtonDelete;
     private Button mButtonEnter;
+    private boolean isUpper = false;
+    private Context context;
 
     // This will map the button resource id to the String value that we want to
     // input when that button is clicked.
@@ -47,7 +49,7 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
 
     @SuppressLint("ClickableViewAccessibility")
     private void init(Context context, AttributeSet attrs) {
-
+        this.context = context;
         // initialize buttons
         LayoutInflater.from(context).inflate(R.layout.keyboard, this, true);
         mButton1 = (Button) findViewById(R.id.button_1);
@@ -91,7 +93,7 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
         mButtonm = (Button) findViewById(R.id.button_m);
 
 
-
+        mButtonshift = (Button) findViewById(R.id.button_shift);
         mButtonDelete = (Button) findViewById(R.id.button_delete);
         mButtonEnter = (Button) findViewById(R.id.button_enter);
 
@@ -189,6 +191,7 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
 
         mButtonDelete.setOnClickListener(this);
         mButtonEnter.setOnClickListener(this);
+        mButtonshift.setOnClickListener(this);
 
         // map buttons IDs to input strings
         keyValues.put(R.id.button_1, "1");
@@ -251,9 +254,23 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
                 // delete the selection
                 inputConnection.commitText("", 1);
             }
+        } else if(v.getId() == R.id.button_shift){
+
+             isUpper = !isUpper;
+            Log.i("KEYCODE_SHIFT", "Current status " + isUpper);
         } else {
+
             String value = keyValues.get(v.getId());
-            inputConnection.commitText(value, 1);
+            char s = value.charAt(0);
+
+            if(isUpper && !Character.isDigit(s)){
+                inputConnection.commitText(Character.toString(Character.toUpperCase(s)) , 1);
+                isUpper= false;
+            }else{
+                inputConnection.commitText(value, 1);
+                isUpper = false;
+            }
+
         }
     }
 
