@@ -39,6 +39,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import android.content.Context;
 import android.hardware.Camera;
@@ -67,6 +72,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
@@ -345,6 +352,46 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             addEntry(event);
             plotData = false;
         }
+        // Write a message to the database
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        final DatabaseReference myRef = database.getReference("Accelerometer: ");
+        final String tempacc = event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2];
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "real time: " + "prepare");
+               /* new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                Log.d(TAG, "real time: " + "prepare to write real time");
+                                myRef.child("points").push().setValue(tempacc);
+                            }
+                        },0,
+                        1000 * 15);*/
+                final DatabaseReference temppoints = myRef.child("points").push();
+                new Timer().scheduleAtFixedRate(new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "real time: " + "prepare to write real time");
+                        temppoints.setValue(tempacc);
+                    }
+                },0, 1000 * 60);
+
+}
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+       // String acckey = "X: " + event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2];
+       // myRef.child("points").push().setValue(acckey);
+       // myRef.setValue("X: " + event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2]); one entry real time
     }
 
     private void addEntry(SensorEvent event) {
@@ -634,6 +681,8 @@ progressDialog.setMessage("Registering User");
                 }
             }
         });
+
+
 
     }
     @Override

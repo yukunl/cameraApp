@@ -22,9 +22,6 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.concurrent.Executor;
 
-/**
- * Created by safi on 7/21/17.
- */
 
 public class FilesSyncToFirebase {
 

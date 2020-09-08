@@ -13,6 +13,9 @@ import android.view.inputmethod.InputConnection;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MyKeyboard extends LinearLayout implements View.OnClickListener {
 
     // constructors
@@ -137,14 +140,19 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
         mButton3.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("Keystroke: ");
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     Log.i("Pressure: " , "Pressure for button 3"  + event.getPressure());
+                    myRef.child("Pressure").child("Button 3").push().setValue(event.getPressure());
+
                     // Pressed
                     Log.i("time pressed: ", "Time pressed for button 3 :"+ System.currentTimeMillis() );
+                    myRef.child("Time Pressed:").child("Button 3").push().setValue(System.currentTimeMillis());
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     // Released
                     Log.i("time released: ", "Time released for button 3 :"+ System.currentTimeMillis() );
+                    myRef.child("Time Released:").child("Button 3").push().setValue(System.currentTimeMillis());
                 }
                 return false;
             }
