@@ -133,6 +133,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         });
 
+
+        //camera
+        Button frontCamera = findViewById(R.id.frontcamera);
+
+        frontCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, 1);
+                }
+            }
+
+        });
+
+
+
 //        // keystroke
 //        Button keystroke = findViewById(R.id.keystroke);
 //        keystroke.setOnClickListener(new View.OnClickListener(){

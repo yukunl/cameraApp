@@ -35,7 +35,7 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
             mButtone, mButtonr, mButtont,mButtony, mButtonu, mButtoni, mButtono,
             mButtonp, mButtona,mButtons, mButtond, mButtonf, mButtong, mButtonh, mButtonshift,
             mButtonj,mButtonk, mButtonl, mButtonz,mButtonx, mButtonc,mButtonv, mButtonb, mButtonn,mButtonm;
-    private Button mButtonDelete;
+    private Button mButtonDelete, mButtonSpace, mButtonAt, mButtonDash, mButtonDot;
     private Button mButtonEnter;
     private boolean isUpper = false;
     private Context context;
@@ -96,6 +96,10 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
         mButtonshift = (Button) findViewById(R.id.button_shift);
         mButtonDelete = (Button) findViewById(R.id.button_delete);
         mButtonEnter = (Button) findViewById(R.id.button_enter);
+        mButtonAt = (Button) findViewById(R.id.button_at);
+        mButtonSpace = (Button) findViewById(R.id.button_space);
+        mButtonDash = (Button) findViewById(R.id.button_dash);
+        mButtonDot = (Button) findViewById(R.id.button_dot);
 
         // set button click listeners
         mButton1.setOnClickListener(this);
@@ -192,6 +196,11 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
         mButtonDelete.setOnClickListener(this);
         mButtonEnter.setOnClickListener(this);
         mButtonshift.setOnClickListener(this);
+        mButtonSpace.setOnClickListener(this);
+        mButtonAt.setOnClickListener(this);
+        mButtonDash.setOnClickListener(this);
+        mButtonDot.setOnClickListener(this);
+
 
         // map buttons IDs to input strings
         keyValues.put(R.id.button_1, "1");
@@ -235,6 +244,11 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
         keyValues.put(R.id.button_m, "m");
 
         keyValues.put(R.id.button_enter, "\n");
+        keyValues.put(R.id.button_space, " ");
+        keyValues.put(R.id.button_at, "@");
+        keyValues.put(R.id.button_dash, "-");
+        keyValues.put(R.id.button_dot, ".");
+
     }
 
     @Override
