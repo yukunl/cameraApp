@@ -342,8 +342,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Write a message to the database
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-        final DatabaseReference myRef = database.getReference("Accelerometer: ");
+        String emailinfo = getIntent().getExtras().toString();
+        final DatabaseReference myRef = database.getReference("User:/"+ emailinfo);
         final String tempacc = event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2];
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -611,6 +611,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             case R.id.login:
                 Intent intent = new Intent(this, keystroke.class);
                 this.startActivity(intent);
+
                 break;
             default:
                 return super.onOptionsItemSelected(item);

@@ -19,6 +19,7 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class keystroke extends AppCompatActivity implements View.OnClickListener{
 
@@ -35,7 +46,9 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
     private TextView signin;
     private String emailinfo;
     private String passwordinfo;
+    private ProgressBar progressBar;
     private ProgressDialog progressDialog;
+    private FirebaseAuth mAuth;
     private FirebaseAuth firebaseAuth;
     private MyKeyboard keyboard;
     private InputConnection ic;
@@ -45,7 +58,7 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.keystrokeview);
         Intent intent = getIntent();
-
+        mAuth = FirebaseAuth.getInstance();
 
          email = (EditText) findViewById(R.id.email);
          password = (EditText) findViewById(R.id.password);
@@ -54,7 +67,7 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
 
         registerEditText(R.id.email);
         registerEditText(R.id.password);
-
+        progressBar = findViewById(R.id.progressBar);
 
 
         //get email and password
@@ -76,7 +89,53 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
         }
         if (view ==signin) {
             //open login activity
+            userLogin();
         }
+    }
+    private void userLogin(){
+        emailinfo = email.getText().toString().trim();
+        passwordinfo = password.getText().toString().trim();
+
+        if (TextUtils.isEmpty(emailinfo)){
+            //username is empty
+            Toast.makeText(this, "Please enter username", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(passwordinfo)){
+            //password is empty
+            Toast.makeText(this, "Please enter your password", Toast.LENGTH_SHORT).show();
+        }
+
+        progressDialog.setMessage("Logging in user");
+        progressDialog.show();
+
+        firebaseAuth.signInWithEmailAndPassword(emailinfo, passwordinfo)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.dismiss();
+                        if(task.isSuccessful()){
+                            Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_LONG).show();
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            finish();
+                            Intent intent= new Intent(keystroke.this,MainActivity.class);
+                            intent.putExtra("emailinfo", emailinfo);
+                            startActivity(intent);                         }
+                    }
+                });
+        // Write a message to the database
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        final DatabaseReference myRef = database.getReference("User:");
+        //DatabaseReference usersRef = myRef.child("users");
+
+        myRef.push().setValue(emailinfo);
+      //  myRef.setValue(emailinfo).push ();
+    //    final DatabaseReference temppoints = myRef.child("points").push();
+
     }
 
 
@@ -100,6 +159,7 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
     }
 
     private void registerUser () {
+        progressBar.setVisibility(View.VISIBLE);
         emailinfo = email.getText().toString().trim();
         passwordinfo = password.getText().toString().trim();
         Context context = getApplicationContext();
@@ -112,30 +172,37 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
             Toast.makeText(context, "Please enter password", duration).show();
             return;
         }
-        progressDialog.setMessage("Registering User");
-        progressDialog.show();
+//        progressDialog.setMessage("Registering User");
+//        progressDialog.show();
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-         /*  firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo)
-             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+
+        mAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                          //  FirebaseUser user = firebaseAuth.getCurrentUser();
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.GONE);
+                            //Intent intent = new Intent(keystroke.this, keystroke.class);
+                            //startActivity(intent);
                         }
+                        else {
+                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                Toast.makeText(keystroke.this, "User with this email already exist.", Toast.LENGTH_SHORT).show();
+                            }
 
-                        // ...
+                            Toast.makeText(getApplicationContext(), "Registration failed! Please try again later", Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.GONE);
+                        }
                     }
-                });*/
+
+                });
+
+
+
+
 
         firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -146,6 +213,8 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
                             Toast.makeText(keystroke.this, "Registered Successfully", Toast.LENGTH_SHORT);
 
                         } else {
+
+
                             // If sign in fails, display a message to the user.
                             Toast.makeText(keystroke.this, "Please try again", Toast.LENGTH_SHORT);
                         }
@@ -154,23 +223,11 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
                     }
                 });
 
-        firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
 
-                if (task.isSuccessful()){
-                    Toast.makeText(keystroke.this, "Registered Successfully", Toast.LENGTH_SHORT);
-                }
-                else {
-
-                    Toast.makeText(keystroke.this, "Please try again", Toast.LENGTH_SHORT);
-                }
-            }
-        });
 
     }
 
-
+public String getEmailinfo () {return emailinfo;}
 }
 
 
