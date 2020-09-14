@@ -339,41 +339,41 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             plotData = false;
         }
 
-        // Write a message to the database
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        String emailinfo = getIntent().getExtras().toString();
-        final DatabaseReference myRef = database.getReference("User:/"+ emailinfo);
-        final String tempacc = event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2];
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(TAG, "real time: " + "prepare");
-               /* new android.os.Handler().postDelayed(
-                        new Runnable() {
-                            public void run() {
-                                Log.d(TAG, "real time: " + "prepare to write real time");
-                                myRef.child("points").push().setValue(tempacc);
-                            }
-                        },0,
-                        1000 * 15);*/
-                final DatabaseReference temppoints = myRef.child("points").push();
-                new Timer().scheduleAtFixedRate(new TimerTask() {
-
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "real time: " + "prepare to write real time");
-                        temppoints.setValue(tempacc);
-                    }
-                },0, 1000 * 60);
-
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        // Write a message to the database
+//
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//
+//        final DatabaseReference myRef = database.getReference("User:/");
+//        final String tempacc = event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2];
+//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                Log.d(TAG, "real time: " + "prepare");
+//               /* new android.os.Handler().postDelayed(
+//                        new Runnable() {
+//                            public void run() {
+//                                Log.d(TAG, "real time: " + "prepare to write real time");
+//                                myRef.child("points").push().setValue(tempacc);
+//                            }
+//                        },0,
+//                        1000 * 15);*/
+//                final DatabaseReference temppoints = myRef.child("points").push();
+//                new Timer().scheduleAtFixedRate(new TimerTask() {
+//
+//                    @Override
+//                    public void run() {
+//                        Log.d(TAG, "real time: " + "prepare to write real time");
+//                        temppoints.setValue(tempacc);
+//                    }
+//                },0, 1000 * 60);
+//
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
     }
 
@@ -611,7 +611,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             case R.id.login:
                 Intent intent = new Intent(this, keystroke.class);
                 this.startActivity(intent);
-
+              
                 break;
             default:
                 return super.onOptionsItemSelected(item);

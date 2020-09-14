@@ -35,6 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -125,14 +126,8 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
                             startActivity(intent);                         }
                     }
                 });
-        // Write a message to the database
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-        final DatabaseReference myRef = database.getReference("User:");
-        //DatabaseReference usersRef = myRef.child("users");
-
-        myRef.push().setValue(emailinfo);
+        // myRef.push().setValue(emailinfo);
       //  myRef.setValue(emailinfo).push ();
     //    final DatabaseReference temppoints = myRef.child("points").push();
 
@@ -183,6 +178,28 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            // Write a message to the database
+
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+                            final DatabaseReference myRef = database.getReference();
+                            String emailName = emailinfo.split("@")[0];
+                            Log.d("firebase" , emailName);
+                            User user = new User(emailName, emailinfo, passwordinfo);
+                            DatabaseReference usersRef = myRef.child("Users");
+
+                            //add user object under the parent "Users"
+                            //usersRef.push().setValue(user);
+                            FirebaseUser mCurrentUser= task.getResult().getUser();
+                            String userid =mCurrentUser.getUid();
+                            usersRef.child(userid).setValue(user);
+                            //Add sub children (sensor) to user node
+                            DatabaseReference sensor_ref =usersRef.child(userid).child("Sensors");
+                            HashMap <String, KeystrokeData> KeystrokeArray = MyKeyboard.getKeystrokeArray ();
+                            sensor_ref.child("Keystrokes").setValue( KeystrokeArray);
+                            sensor_ref.child("Accelerometer").setValue(0);
+                            sensor_ref.child("Camera").setValue(0);
+
                             Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
                             progressBar.setVisibility(View.GONE);
                             //Intent intent = new Intent(keystroke.this, keystroke.class);
@@ -204,7 +221,7 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
 
 
 
-        firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo)
+      /*  firebaseAuth.createUserWithEmailAndPassword(emailinfo, passwordinfo)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -221,7 +238,7 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
 
                         // ...
                     }
-                });
+                });*/
 
 
 

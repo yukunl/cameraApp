@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+
 public class MyKeyboard extends LinearLayout implements View.OnClickListener {
 
     // constructors
@@ -42,6 +44,7 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
     private Button mButtonEnter;
     private boolean isUpper = false;
     private Context context;
+    private static HashMap<String, KeystrokeData> KeystrokeArray =new HashMap<>();
 
     // This will map the button resource id to the String value that we want to
     // input when that button is clicked.
@@ -121,6 +124,8 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
                     // Released
                     Log.i("time released: ", "Time released for button 1 :"+ System.currentTimeMillis() );
                 }
+                KeystrokeData dataBtn1 = new KeystrokeData(event.getPressure(), System.currentTimeMillis(), System.currentTimeMillis());
+                KeystrokeArray.put ("Button1",dataBtn1 );
                 return false;
             }
         });
@@ -138,6 +143,8 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
                     // Released
                     Log.i("time released: ", "Time released for button 2 :"+ System.currentTimeMillis() );
                 }
+                KeystrokeData dataBtn2 = new KeystrokeData(event.getPressure(), System.currentTimeMillis(), System.currentTimeMillis());
+                KeystrokeArray.put ("Button2",dataBtn2 );
                 return false;
             }
         });
@@ -150,16 +157,14 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
                 DatabaseReference myRef = database.getReference("Keystroke: ");
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     Log.i("Pressure: " , "Pressure for button 3"  + event.getPressure());
-                    myRef.child("Pressure").child("Button 3").push().setValue(event.getPressure());
-
-                    // Pressed
+                      // Pressed
                     Log.i("time pressed: ", "Time pressed for button 3 :"+ System.currentTimeMillis() );
-                    myRef.child("Time Pressed:").child("Button 3").push().setValue(System.currentTimeMillis());
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     // Released
                     Log.i("time released: ", "Time released for button 3 :"+ System.currentTimeMillis() );
-                    myRef.child("Time Released:").child("Button 3").push().setValue(System.currentTimeMillis());
-                }
+                       }
+                KeystrokeData dataBtn2 = new KeystrokeData(event.getPressure(), System.currentTimeMillis(), System.currentTimeMillis());
+                KeystrokeArray.put ("Button3",dataBtn2 );
                 return false;
             }
         });
@@ -301,4 +306,11 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
     public void setInputConnection(InputConnection ic) {
         this.inputConnection = ic;
     }
+
+    //get keystroke data hashmap
+    public static HashMap <String, KeystrokeData> getKeystrokeArray () {
+
+        return KeystrokeArray;
+    }
+
 }
