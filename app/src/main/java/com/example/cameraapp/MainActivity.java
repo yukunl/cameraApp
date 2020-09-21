@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -73,15 +74,20 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.security.KeyStore;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 import static com.example.cameraapp.keystroke.MyaccountShow;
+import static com.example.cameraapp.keystroke.userID;
 
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener,View.OnClickListener{
@@ -95,6 +101,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private boolean plotData = true;
     Sensor accelerometer;
     Sensor gyroscope;
+    private Boolean checkSensor = false;
+    private Integer indexAcc = 0;
+    private static HashMap <String, List<Float>> KeystrokeArray;
 
     //real time
 
@@ -114,6 +123,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef = database.getReference();
+        DatabaseReference usersRef = myRef.child("Users");
+        DatabaseReference sensor_ref =usersRef.child(userID).child("Sensors");
+        KeystrokeArray = new HashMap <String, List<Float>> ();
+
+        //delay
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                checkSensor = true;
+                Log.d ("Accelerometer", checkSensor.toString());
+                new Handler().postDelayed(this, 10000);
+            }
+        }, 10000);
 
 
 
@@ -299,6 +324,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
         );
 
+
     }
 
     private void startPlot () {
@@ -326,56 +352,36 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
-        Log.d("Accelerometer", "onSensorChanged x: " + event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2]);
         xvalue.setText("X value: " + event.values[0]);
         yvalue.setText("Y value: " + event.values[1]);
         zvalue.setText("Z value: " + event.values[2]);
 
-        Log.d("Gyroscope", "onSensorChanged x: " + event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2]);
+        // Log.d("Gyroscope", "onSensorChanged x: " + event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2]);
         gyrox.setText("X value: " + event.values[0]);
         gyroy.setText("Y value: " + event.values[1]);
         gyroz.setText("Z value: " + event.values[2]);
+        if (checkSensor) {
+            checkSensor = false;
+            Log.d("Accelerometer", "onSensorChanged x: " + event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2]);
 
+            if (MyaccountShow) {
+
+
+                List<Float> accData = new ArrayList<Float>();
+                accData.add(new Float(event.values[0]));
+                accData.add(new Float(event.values[1]));
+                accData.add(new Float(event.values[2]));
+                KeystrokeArray.put(indexAcc.toString(), accData);
+
+                FirebaseDatabase.getInstance().getReference().child("Users").child(userID).child("Sensors").child("Accelerometer").setValue(KeystrokeArray);
+                ++indexAcc;
+            }
+
+        }
         if (plotData) {
             addEntry(event);
             plotData = false;
         }
-
-//        // Write a message to the database
-//
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//
-//        final DatabaseReference myRef = database.getReference("User:/");
-//        final String tempacc = event.values[0] + "Y: " + event.values[1] + "Z: " + event.values[2];
-//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                Log.d(TAG, "real time: " + "prepare");
-//               /* new android.os.Handler().postDelayed(
-//                        new Runnable() {
-//                            public void run() {
-//                                Log.d(TAG, "real time: " + "prepare to write real time");
-//                                myRef.child("points").push().setValue(tempacc);
-//                            }
-//                        },0,
-//                        1000 * 15);*/
-//                final DatabaseReference temppoints = myRef.child("points").push();
-//                new Timer().scheduleAtFixedRate(new TimerTask() {
-//
-//                    @Override
-//                    public void run() {
-//                        Log.d(TAG, "real time: " + "prepare to write real time");
-//                        temppoints.setValue(tempacc);
-//                    }
-//                },0, 1000 * 60);
-//
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
 
     }
 
@@ -473,6 +479,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if(mMediaRecorder==null){
             prepareVideoRecorder();
         }
+
+
     }
 
     public Camera getCameraInstance(){

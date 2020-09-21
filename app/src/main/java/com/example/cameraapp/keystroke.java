@@ -54,6 +54,7 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
     private MyKeyboard keyboard;
     private InputConnection ic;
     public static Boolean MyaccountShow = false;
+    public static String userID = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,8 +193,9 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
                             //add user object under the parent "Users"
                             //usersRef.push().setValue(user);
                             FirebaseUser mCurrentUser= task.getResult().getUser();
-                            String userid =mCurrentUser.getUid();
+                             String userid =mCurrentUser.getUid();
                             usersRef.child(userid).setValue(user);
+                            Log.d("firebase" , userid);
                             //Add sub children (sensor) to user node
                             DatabaseReference sensor_ref =usersRef.child(userid).child("Sensors");
                             HashMap <String, KeystrokeData> KeystrokeArray = MyKeyboard.getKeystrokeArray ();
@@ -203,6 +205,7 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
 
                             Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
                             progressBar.setVisibility(View.GONE);
+                            userID = userid;
                             //Intent intent = new Intent(keystroke.this, keystroke.class);
                             //startActivity(intent);
                         }
