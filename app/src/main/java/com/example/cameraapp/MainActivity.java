@@ -73,6 +73,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.KeyStore;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -80,6 +81,7 @@ import java.util.TimerTask;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
+import static com.example.cameraapp.keystroke.MyaccountShow;
 
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener,View.OnClickListener{
@@ -602,6 +604,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.mymenu,menu);
+        //get my account item
+        MenuItem myaccount = menu.findItem(R.id.account);
+        MenuItem login = menu.findItem(R.id.login);
+        MenuItem logout = menu.findItem(R.id.logout);
+        Log.i("MY", MyaccountShow.toString());
+        myaccount.setVisible(MyaccountShow);
+        logout.setVisible(MyaccountShow);
+        login.setVisible(!MyaccountShow);
+        if (MyaccountShow){
+            Intent intent1 = getIntent();
+            String email = intent1.getStringExtra("emailinfo");
+            myaccount.setTitle(email);
+        }
         return true;
     }
 
@@ -612,6 +627,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 Intent intent = new Intent(this, keystroke.class);
                 this.startActivity(intent);
               
+                break;
+            case R.id.logout:
+                MyaccountShow =false;
+                invalidateOptionsMenu();
+                FirebaseAuth.getInstance().signOut();
+                Toast.makeText(getApplicationContext(), "Logout successful!", Toast.LENGTH_LONG).show();
                 break;
             default:
                 return super.onOptionsItemSelected(item);

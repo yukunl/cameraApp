@@ -53,7 +53,7 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
     private FirebaseAuth firebaseAuth;
     private MyKeyboard keyboard;
     private InputConnection ic;
-
+    public static Boolean MyaccountShow = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,7 +119,8 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
                         if(task.isSuccessful()){
                             Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_LONG).show();
                             FirebaseUser user = mAuth.getCurrentUser();
-
+                             MyaccountShow = true;
+                            invalidateOptionsMenu();
                             finish();
                             Intent intent= new Intent(keystroke.this,MainActivity.class);
                             intent.putExtra("emailinfo", emailinfo);

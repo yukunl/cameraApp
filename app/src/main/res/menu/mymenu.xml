@@ -13,8 +13,15 @@
     <item
         android:id="@+id/login"
         android:title="Login"
-        app:showAsAction="never"
-        />
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/account"
+        android:title="MyAccount"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/logout"
+        android:title="Logout"
+        app:showAsAction="never" />
 
 
 </menu>

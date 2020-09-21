@@ -34,6 +34,11 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
         init(context, attrs);
     }
 
+
+
+
+
+
     // keyboard keys (buttons)
     private Button mButton1, mButton2, mButton3,mButton4, mButton5, mButton6,
             mButton7, mButton8, mButton9,mButton0, mButtonq, mButtonw,
@@ -107,18 +112,20 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
         mButtonDash = (Button) findViewById(R.id.button_dash);
         mButtonDot = (Button) findViewById(R.id.button_dot);
 
-        // set button click listeners
+
+
+            // set button click listeners
         mButton1.setOnClickListener(this);
         keyValues.put(R.id.button_1, "1");
-        mButton1.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+        mButton1.setOnTouchListener(new View.OnTouchListener()
+                    {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
 
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    //inputConnection.commitText("1", 1);
-                    Log.i("Pressure: " , "Pressure for button 1"  + event.getPressure());
-                    // Pressed
-
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            //inputConnection.commitText("1", 1);
+                            Log.i("Pressure: " , "Pressure for button 1"  + event.getPressure());
+                            // Pressed
                     Log.i("time pressed: ", "Time pressed for button 1 :"+ System.currentTimeMillis() );
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     // Released
@@ -170,7 +177,10 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
         });
 
         mButton4.setOnClickListener(this);
+       // mButton4.setOnTouchListener(handleTouch);
+
         mButton5.setOnClickListener(this);
+      //  mButton5.setOnTouchListener(handleTouch);
         mButton6.setOnClickListener(this);
         mButton7.setOnClickListener(this);
         mButton8.setOnClickListener(this);
@@ -211,6 +221,19 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
         mButtonshift.setOnClickListener(this);
         mButtonSpace.setOnClickListener(this);
         mButtonAt.setOnClickListener(this);
+        mButtonAt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                }
+                KeystrokeData dataBtn2 = new KeystrokeData(event.getPressure(), System.currentTimeMillis(), System.currentTimeMillis());
+                KeystrokeArray.put ("Button at",dataBtn2 );
+                return false;
+            }
+        });
+
         mButtonDash.setOnClickListener(this);
         mButtonDot.setOnClickListener(this);
 
@@ -259,6 +282,7 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
         keyValues.put(R.id.button_enter, "\n");
         keyValues.put(R.id.button_space, " ");
         keyValues.put(R.id.button_at, "@");
+
         keyValues.put(R.id.button_dash, "-");
         keyValues.put(R.id.button_dot, ".");
 
@@ -313,4 +337,25 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
         return KeystrokeArray;
     }
 
+
+//
+//private View.OnTouchListener handleTouch = new View.OnTouchListener() {
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    //inputConnection.commitText("1", 1);
+//                    Log.i("Pressure: ", "Pressure for button 1" + event.getPressure());
+//                    // Pressed
+//                    Log.i("time pressed: ", "Time pressed for button 1 :" + System.currentTimeMillis());
+//                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    // Released
+//                    Log.i("time released: ", "Time released for button 1 :" + System.currentTimeMillis());
+//                }
+//                KeystrokeData dataBtn1 = new KeystrokeData(event.getPressure(), System.currentTimeMillis(), System.currentTimeMillis());
+//                KeystrokeArray.put(event.toString(), dataBtn1);
+//                return false;
+//            }
+//        };
 }
