@@ -137,6 +137,9 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
             }
         });
 
+
+
+
         mButton2.setOnClickListener(this);
         mButton2.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -165,10 +168,10 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     Log.i("Pressure: " , "Pressure for button 3"  + event.getPressure());
                       // Pressed
-                    Log.i("time pressed: ", "Time pressed for button 3 :"+ System.currentTimeMillis() );
+                    Log.i("time pressed: ", "Time pressed for button 3 :"+ System.nanoTime() );
                     } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     // Released
-                    Log.i("time released: ", "Time released for button 3 :"+ System.currentTimeMillis() );
+                    Log.i("time released: ", "Time released for button 3 :"+ System.nanoTime() );
                        }
                 KeystrokeData dataBtn2 = new KeystrokeData(event.getPressure(), System.currentTimeMillis(), System.currentTimeMillis());
                 KeystrokeArray.put ("Button3",dataBtn2 );
@@ -324,6 +327,30 @@ public class MyKeyboard extends LinearLayout implements View.OnClickListener {
 
         }
     }
+
+//    public void addButton(String buttonName){
+//        String bName = "R.id." + buttonName;
+//        Button mButton = (Button)findViewById(bName);
+//        mButton1 = (Button) findViewById(R.id.button_1);
+//        mButton2.setOnClickListener(this);
+//        mButton2.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    Log.i("Pressure: " , "Pressure for button 2"  + event.getPressure());
+//                    // Pressed
+//                    Log.i("time pressed: ", "Time pressed for button 2 :"+ System.currentTimeMillis() );
+//                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    // Released
+//                    Log.i("time released: ", "Time released for button 2 :"+ System.currentTimeMillis() );
+//                }
+//                KeystrokeData dataBtn2 = new KeystrokeData(event.getPressure(), System.currentTimeMillis(), System.currentTimeMillis());
+//                KeystrokeArray.put ("Button2",dataBtn2 );
+//                return false;
+//            }
+//        });
+//    }
 
     // The activity (or some parent or controller) must give us
     // a reference to the current EditText's InputConnection

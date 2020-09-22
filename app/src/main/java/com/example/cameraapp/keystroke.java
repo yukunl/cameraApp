@@ -140,17 +140,33 @@ public class keystroke extends AppCompatActivity implements View.OnClickListener
     public void registerEditText(int resid) {
         // Find the EditText 'resid'
         EditText edittext= (EditText)findViewById(resid);
-        edittext.setOnTouchListener(new View.OnTouchListener() {
+//        edittext.setOnTouchListener(new View.OnTouchListener() {
+//            @Override public boolean onTouch(View v, MotionEvent event) {
+//                EditText edittext = (EditText) v;
+//              // int inType = edittext.getInputType();       // Backup the input type
+//                edittext.setRawInputType(InputType.TYPE_CLASS_TEXT); // Disable standard keyboard
+//                edittext.setTextIsSelectable(true);               // Call native handler
+//                ic = edittext.onCreateInputConnection(new EditorInfo());
+//                keyboard.setInputConnection(ic);// Restore input type
+//                return true; // Consume touch event
+//            }
+//        });
+        edittext.setOnTouchListener(new View.OnTouchListener(){
             @Override public boolean onTouch(View v, MotionEvent event) {
                 EditText edittext = (EditText) v;
-               // int inType = edittext.getInputType();       // Backup the input type
-                edittext.setRawInputType(InputType.TYPE_CLASS_TEXT); // Disable standard keyboard
+                int inType = edittext.getInputType();       // Backup the input type
+                edittext.setInputType(InputType.TYPE_NULL); // Disable standard keyboard
+                edittext.onTouchEvent(event);               // Call native handler
+                edittext.setInputType(inType);              // Restore input type
                 edittext.setTextIsSelectable(true);               // Call native handler
-                ic = edittext.onCreateInputConnection(new EditorInfo());
+               ic = edittext.onCreateInputConnection(new EditorInfo());
                 keyboard.setInputConnection(ic);// Restore input type
                 return true; // Consume touch event
             }
         });
+
+
+
         // Disable spell check (hex strings look like words to Android)
         edittext.setInputType( edittext.getInputType() | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS );
     }
