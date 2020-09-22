@@ -5,15 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import	android.widget.ProgressBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -38,6 +42,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.android.gms.common.internal.Constants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -72,6 +77,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -104,8 +110,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Boolean checkSensor = false;
     private Integer indexAcc = 0;
     private static HashMap <String, List<Float>> KeystrokeArray;
-
+    private static final int REQUEST_IMAGE_CAPTURE = 111;
+    public static String myaccountName = null;
     //real time
+    private Integer FrontImageNumber = 0;
+    private Integer BackImageNumber =0;
 
     private Camera mCamera;
     private CameraPreview mPreview;
@@ -149,10 +158,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         backCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, 1);
-                }
+                onLaunchCamera ();
             }
 
         });
@@ -164,12 +170,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         frontCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, 1);
-                }
+                onLaunchCamera ();
             }
-
         });
 
 
@@ -624,6 +626,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             Intent intent1 = getIntent();
             String email = intent1.getStringExtra("emailinfo");
             myaccount.setTitle(email);
+            myaccountName = email;
         }
         return true;
     }
@@ -641,6 +644,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 invalidateOptionsMenu();
                 FirebaseAuth.getInstance().signOut();
                 Toast.makeText(getApplicationContext(), "Logout successful!", Toast.LENGTH_LONG).show();
+                myaccountName = null;
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -649,6 +653,54 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return true;
     }
 
+    public void onLaunchCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            encodeBitmapAndSaveToFirebase(imageBitmap);
+        }
+    }
+    public void encodeBitmapAndSaveToFirebase(Bitmap bitmap) {
+        //encode this array of bytes into a long Base64 string.
+        if (MyaccountShow) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            String imageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+            Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                FirebaseDatabase.getInstance().getReference().child("Users").child(userID).child("Sensors").child("Camera").child("Front").child(FrontImageNumber.toString()).setValue(imageEncoded);
+                ++FrontImageNumber;
+            } else {
+                FirebaseDatabase.getInstance().getReference().child("Users").child(userID).child("Sensors").child("Camera").child("Back").child(BackImageNumber.toString()).setValue(imageEncoded);
+                ++BackImageNumber;
+            }
+            ImageView image =(ImageView)findViewById(R.id.image);
+
+            //decode base64 string to image
+            try {
+                Bitmap decodedImage = decodeFromFirebaseBase64 (imageEncoded);
+                image.setImageBitmap(decodedImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Please log in to enable Firebase storage", Toast.LENGTH_LONG).show(); }
+
+    }
+    public static Bitmap decodeFromFirebaseBase64(String image) throws IOException {
+        byte[] decodedByteArray = android.util.Base64.decode(image, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedByteArray, 0, decodedByteArray.length);
+    }
     @Override
     public void onClick(View view) {
 

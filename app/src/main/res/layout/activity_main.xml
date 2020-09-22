@@ -3,177 +3,185 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 
-<LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:id="@+id/mainac">
-
-<!--    <EditText-->
-<!--        android:id="@+id/email"-->
-<!--        android:hint="Enter your email"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_marginTop="30sp"-->
-<!--        android:text="" />-->
-<!--    <EditText-->
-<!--        android:id="@+id/password"-->
-<!--        android:hint="Enter your password"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_marginTop="30sp"-->
-<!--        android:text="" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/register"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Registration"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/signin"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="30sp"-->
-<!--        android:text="Already Registered? Sign in here" />-->
-
-
-
-    <TextView
-        android:id="@+id/accel"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/mainac"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="Accelerometer"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/xValue"
-        android:layout_width="152dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30sp"
-        android:text="X Value" />
+        <!--    <EditText-->
+        <!--        android:id="@+id/email"-->
+        <!--        android:hint="Enter your email"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="match_parent"-->
+        <!--        android:layout_marginTop="30sp"-->
+        <!--        android:text="" />-->
+        <!--    <EditText-->
+        <!--        android:id="@+id/password"-->
+        <!--        android:hint="Enter your password"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="match_parent"-->
+        <!--        android:layout_marginTop="30sp"-->
+        <!--        android:text="" />-->
 
-    <TextView
-        android:id="@+id/yValue"
-        android:layout_width="152dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30sp"
-        android:text="Y Value" />
+        <!--    <Button-->
+        <!--        android:id="@+id/register"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:text="Registration"-->
+        <!--        app:layout_constraintEnd_toEndOf="parent"-->
+        <!--        app:layout_constraintStart_toStartOf="parent"-->
+        <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <TextView
-        android:id="@+id/zValue"
-        android:layout_width="152dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30sp"
-        android:text="Z Value" />
-
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/accChart"
-        android:layout_width="match_parent"
-        android:layout_height="299dp" />
+        <!--    <TextView-->
+        <!--        android:id="@+id/signin"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:layout_marginTop="30sp"-->
+        <!--        android:text="Already Registered? Sign in here" />-->
 
 
+        <TextView
+            android:id="@+id/accel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Accelerometer"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/xValue"
+            android:layout_width="152dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30sp"
+            android:text="X Value" />
+
+        <TextView
+            android:id="@+id/yValue"
+            android:layout_width="152dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30sp"
+            android:text="Y Value" />
+
+        <TextView
+            android:id="@+id/zValue"
+            android:layout_width="152dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30sp"
+            android:text="Z Value" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/accChart"
+            android:layout_width="match_parent"
+            android:layout_height="299dp" />
 
 
-    <TextView
-        android:id="@+id/gyro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="Gyroscope"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/gyro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Gyroscope"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/gyroxValue"
-        android:layout_width="152dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30sp"
-        android:text="X Value" />
+        <TextView
+            android:id="@+id/gyroxValue"
+            android:layout_width="152dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30sp"
+            android:text="X Value" />
 
-    <TextView
-        android:id="@+id/gyroyValue"
-        android:layout_width="152dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30sp"
-        android:text="Y Value" />
+        <TextView
+            android:id="@+id/gyroyValue"
+            android:layout_width="152dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30sp"
+            android:text="Y Value" />
 
-    <TextView
-        android:id="@+id/gyrozValue"
-        android:layout_width="152dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30sp"
-        android:text="Z Value" />
+        <TextView
+            android:id="@+id/gyrozValue"
+            android:layout_width="152dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30sp"
+            android:text="Z Value" />
 
-    <Button
-        android:id="@+id/backcamera"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/backcamera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-        android:layout_marginTop="96dp"
-        android:text="backcamera"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="96dp"
+            android:text="backcamera"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/frontcamera"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/frontcamera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-        android:layout_marginTop="96dp"
-        android:text="facecamera"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="96dp"
+            android:text="facecamera"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <Button-->
-<!--        android:id="@+id/keystroke"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="keystroke" />-->
+        <TextView
+            android:id="@+id/photo"
+            android:layout_width="152dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30sp"
+            android:text="Most Recent Photo:" />
 
-    <TextView
-        android:id="@+id/video"
-        android:layout_width="152dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30sp"
-        android:text="Video Sensor Data" />
+        <ImageView
 
-    <FrameLayout
-        android:id="@+id/CameraPreview"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true">
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <!--    <Button-->
+        <!--        android:id="@+id/keystroke"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:text="keystroke" />-->
 
-    </FrameLayout>
+        <TextView
+            android:id="@+id/video"
+            android:layout_width="152dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30sp"
+            android:text="Video Sensor Data" />
 
-    <Chronometer
-        android:id="@+id/chrono"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:textSize="18sp" />
+        <FrameLayout
+            android:id="@+id/CameraPreview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentTop="true">
+
+        </FrameLayout>
+
+        <Chronometer
+            android:id="@+id/chrono"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16dp"
+            android:textSize="18sp" />
 
 
-</LinearLayout>
+    </LinearLayout>
 </ScrollView>

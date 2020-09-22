@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.example.cameraapp.MainActivity.myaccountName;
+import static com.example.cameraapp.keystroke.MyaccountShow;
+
 
 public class TimedDataRecording {
 
@@ -56,7 +59,10 @@ public class TimedDataRecording {
         filesSyncToFirebase = new FilesSyncToFirebase();
         sensorManager = sm;
         context = con;
-        filesSyncToFirebase.SetDirName("test");
+        if (myaccountName!= null){ filesSyncToFirebase.SetDirName(myaccountName.toString());}
+       else {
+            filesSyncToFirebase.SetDirName("unregistered");
+           Toast.makeText(context.getApplicationContext(), "Please log in to enable Firebase storage", Toast.LENGTH_LONG).show(); }
     }
 
     public void SetVidUri(Uri uri) {
