@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -81,10 +82,16 @@ public class FilesSyncToFirebase {
 
     public void StartSync(){
 
-            StorageReference Data = mStorageRef.child(DirName+"/file.csv");
+        int time = (int) (System.currentTimeMillis());
+        Timestamp tsTemp = new Timestamp(time);
+        String ts =  tsTemp.toString();
+        String filepath = DirName + ts + ".csv";
+            StorageReference Data = mStorageRef.child(DirName+"/" + filepath);
             DataSync(Data,File);
-            DataSync(mStorageRef.child(DirName+"/vid.mp4"),photoUri);
 
+            if (photoUri != null) {
+                DataSync(mStorageRef.child(DirName + "/vid.mp4"), photoUri);
+            }
     }
 
 

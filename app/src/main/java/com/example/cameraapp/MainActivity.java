@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     File DataFile;
     private boolean isRecording = false;
     Chronometer chrono;
+    generateDataCSV datacsv;
 
     // ImageView imageView;
     @Override
@@ -377,6 +378,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                 FirebaseDatabase.getInstance().getReference().child("Users").child(userID).child("Sensors").child("Accelerometer").setValue(KeystrokeArray);
                 ++indexAcc;
+                datacsv.startRecording();
             }
 
         }
@@ -606,6 +608,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManageracc.unregisterListener(this);
         thread.interrupt();
         super.onDestroy();
+
     }
 
 
@@ -627,6 +630,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             String email = intent1.getStringExtra("emailinfo");
             myaccount.setTitle(email);
             myaccountName = email;
+
+            //prepre for csv file
+            File filecsv=null;
+
+            try {
+                filecsv =createFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            datacsv = new generateDataCSV(MainActivity.this,filecsv,sensorManager);
+            Log.i ("recording", "recording is started");
+
         }
         return true;
     }
@@ -643,6 +658,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 MyaccountShow =false;
                 invalidateOptionsMenu();
                 FirebaseAuth.getInstance().signOut();
+                datacsv.stopRecording();
                 Toast.makeText(getApplicationContext(), "Logout successful!", Toast.LENGTH_LONG).show();
                 myaccountName = null;
                 break;
